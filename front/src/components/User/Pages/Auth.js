@@ -34,7 +34,7 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined,
+          nickname: undefined,
         },
         formState.inputs.username.isValid && formState.inputs.password.isValid
       );
@@ -42,7 +42,7 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: {
+          nickname: {
             value: "",
             isValid: false,
           },
@@ -57,8 +57,8 @@ const Auth = () => {
     event.preventDefault();
     if (isLogin) {
       try {
-        await sendRequest(
-          "http://localhost:5000/api/users/login",
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + "/login",
           "POST",
           JSON.stringify({
             username: formState.inputs.username.value,
@@ -68,40 +68,37 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
-        auth.login();
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     } else {
       try {
-        await sendRequest(
-          "http://localhost:5000/api/users/signup",
+        const formData = new FormData();
+        formData.append("nickname", formState.inputs.nickname.value);
+        formData.append("username", formState.inputs.username.value);
+        formData.append("password", formState.inputs.password.value);
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + "/signup",
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            username: formState.inputs.username.value,
-            password: formState.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData
         );
 
-        auth.login();
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };
 
   return (
-    <React.Fragment>
+    <>
       <ErrorModal error={error} onClear={clearError} />
       <Card className="authentication">
-        {isLoading && <LoadingSpinner asOverlay={true} />}
+        {isLoading && <LoadingSpinner asOverlay />}
         <h2>Login Required</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>
           {!isLogin && (
             <Input
               element="input"
-              id="name"
+              id="nickname"
               type="text"
               label="Nick Name"
               validators={[VALIDATOR_MINLENGTH(3)]}
@@ -135,7 +132,7 @@ const Auth = () => {
           SWITCH TO {isLogin ? "SIGNUP" : "LOGIN"}
         </Button>
       </Card>
-    </React.Fragment>
+    </>
   );
 };
 

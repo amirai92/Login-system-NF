@@ -19,11 +19,15 @@ const NavLinks = (props) => {
           <NavLink to="/auth">AUTHENTICATE</NavLink>
         </li>
       )}
-      {auth.isLoggedIn && (
-        <li>
-          <NavLink to="/admin">Only Admin</NavLink>
-        </li>
-      )}
+
+      {
+        //Link for only admin user
+        auth.userId === "600ac50b2f18ea08293cc585" && (
+          <li>
+            <NavLink to="/admin">Admin</NavLink>
+          </li>
+        )
+      }
       {auth.isLoggedIn && (
         <li>
           <button onClick={auth.logout}>LOGOUT</button>
