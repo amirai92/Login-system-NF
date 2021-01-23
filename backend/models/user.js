@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    nickname: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
+    nickname: { type: String },
+    username: { type: String, required: true },
     password: { type: String, require: true, minlength: 6 },
-    role: { type: String, require: true },
+    role: { type: String },
     tokens: [
       {
         token: {
@@ -23,7 +23,8 @@ const userSchema = new Schema(
 userSchema.plugin(uniqueValidator);
 
 userSchema.methods.generateUserToken = async function () {
-  const key = this.role === "admin" ? "secretkey_admin" : "secretkey";
+  const key =
+    this.role === "admin" ? process.env.JWT_KEY_ADMIN : process.env.JWT_KEY;
   const token = jwt.sign({ id: this._id.toString() }, key, {
     expiresIn: "1h",
   });

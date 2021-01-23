@@ -1,0 +1,9 @@
+{
+  "env": {
+    "DB_USER": "amirtask",
+    "DB_PASSWORD": "m3BeBLlZIwm83Tu9",
+    "DB_NAME": "task",
+    "JWT_KEY": "secretkey",
+    "JWT_KEY_ADMIN": "secretkey_admin"
+  }
+}
