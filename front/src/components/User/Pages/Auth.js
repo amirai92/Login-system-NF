@@ -58,7 +58,7 @@ const Auth = () => {
     if (isLogin) {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "/login",
+          process.env.REACT_APP_BACKEND_URL + "/users/login",
           "POST",
           JSON.stringify({
             username: formState.inputs.username.value,
@@ -72,14 +72,18 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
-        const formData = new FormData();
-        formData.append("nickname", formState.inputs.nickname.value);
-        formData.append("username", formState.inputs.username.value);
-        formData.append("password", formState.inputs.password.value);
+        const formData = {
+          nickname: formState.inputs.nickname.value,
+          username: formState.inputs.username.value,
+          password: formState.inputs.password.value,
+        };
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "/signup",
+          process.env.REACT_APP_BACKEND_URL + "/users/signup",
           "POST",
-          formData
+          JSON.stringify(formData),
+          {
+            "Content-Type": "application/json",
+          }
         );
 
         auth.login(responseData.userId, responseData.token);

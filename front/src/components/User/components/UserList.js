@@ -4,16 +4,19 @@ import UserItem from "./UserItem";
 import "./UserList.css";
 
 const apiUrl = "https://jsonplaceholder.typicode.com/photos";
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 const UsersList = (props) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   useEffect(() => {
     async function fetchMyAPI() {
       const response = await fetch(apiUrl);
       const json = await response.json();
-      for (let i = 0; i < 9; i++) {
-        setData(json[i].thumbnailUrl);
-      }
+      setData(json);
     }
     fetchMyAPI();
   }, []);
@@ -29,10 +32,10 @@ const UsersList = (props) => {
   }
   return (
     <ul className="users-list">
-      {props.items.map((user, i) => (
+      {props.items.map((user) => (
         <UserItem
           key={user.id}
-          image={data}
+          image={data ? data[getRandomInt(1, 100)].thumbnailUrl : null}
           nickname={user.nickname}
           username={user.username}
           password={user.password}

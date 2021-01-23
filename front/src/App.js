@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
-//import Auth from "./components/User/Pages/Auth";
-//import Users from "./components/User/Pages/Users";
+import Auth from "./components/User/Pages/Auth";
+import Users from "./components/User/Pages/Users";
 import MainNavigation from "./components/Navigation/MainNavigation";
 import { AuthContext } from "./components/context/auth-context";
 import {
@@ -13,8 +13,8 @@ import { useAuth } from "./components/hooks/auth-hook";
 import "./App.css";
 import LoadingSpinner from "./components/UIElements/LoadingSpinner";
 
-const Users = React.lazy(() => import("./components/User/Pages/Users"));
-const Auth = React.lazy(() => import("./components/User/Pages/Auth"));
+// const Users = React.lazy(() => import("./components/User/Pages/Users"));
+// const Auth = React.lazy(() => import("./components/User/Pages/Auth"));
 
 const App = () => {
   const { token, login, logout, userId } = useAuth();
@@ -55,17 +55,7 @@ const App = () => {
     >
       <Router>
         <MainNavigation />
-        <main>
-          <Suspense
-            fallback={
-              <div className="center">
-                <LoadingSpinner />
-              </div>
-            }
-          >
-            {routes}
-          </Suspense>
-        </main>
+        <main>{routes}</main>
       </Router>
     </AuthContext.Provider>
   );
